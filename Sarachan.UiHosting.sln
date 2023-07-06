@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4E430FFB-5C16-4B0D-9156-51958F4907D4}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarachan.UiHosting", "Src\Sarachan.UiHosting\Sarachan.UiHosting.csproj", "{CD7B1D87-BD50-4A79-BA4C-4FC1FE321D02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarachan.UiHosting.Abstractions", "Src\Sarachan.UiHosting.Abstraction\Sarachan.UiHosting.Abstractions.csproj", "{891A7A0A-5CA2-4C51-9F90-E2FB98891551}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{B974A10F-900A-4E09-88EA-482830E15FFD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarachan.UiHosting.WpfSample", "Samples\Sarachan.UiHosting.WpfSample\Sarachan.UiHosting.WpfSample.csproj", "{E8E5DB38-00F7-4703-9A65-51961AC91894}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarachan.UiHosting.Wpf", "Src\Sarachan.UiHosting.Wpf\Sarachan.UiHosting.Wpf.csproj", "{C76C6DBA-FE4B-4A0F-A7B3-1EA838FD403C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarachan.UiHosting.Mvvm", "Src\Sarachan.UiHosting.Mvvm\Sarachan.UiHosting.Mvvm.csproj", "{7356EEB2-EA90-4B5B-9CC7-1B210DDCF229}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sarachan.UiHosting.GenericEditor", "Src\Sarachan.UiHosting.GenericEditor\Sarachan.UiHosting.GenericEditor.csproj", "{6FBD8677-4814-44E6-8305-5999BDF2BECF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4D734577-1614-4347-924D-AA8476B7C97F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sarachan.UiHosting.Mvvm.Tests", "Tests\Sarachan.UiHosting.Mvvm.Tests\Sarachan.UiHosting.Mvvm.Tests.csproj", "{E1E62CED-45ED-4A0F-9509-DE2B116A71B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD7B1D87-BD50-4A79-BA4C-4FC1FE321D02}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD7B1D87-BD50-4A79-BA4C-4FC1FE321D02}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD7B1D87-BD50-4A79-BA4C-4FC1FE321D02}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD7B1D87-BD50-4A79-BA4C-4FC1FE321D02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{891A7A0A-5CA2-4C51-9F90-E2FB98891551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{891A7A0A-5CA2-4C51-9F90-E2FB98891551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{891A7A0A-5CA2-4C51-9F90-E2FB98891551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{891A7A0A-5CA2-4C51-9F90-E2FB98891551}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E8E5DB38-00F7-4703-9A65-51961AC91894}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8E5DB38-00F7-4703-9A65-51961AC91894}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8E5DB38-00F7-4703-9A65-51961AC91894}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8E5DB38-00F7-4703-9A65-51961AC91894}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C76C6DBA-FE4B-4A0F-A7B3-1EA838FD403C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C76C6DBA-FE4B-4A0F-A7B3-1EA838FD403C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C76C6DBA-FE4B-4A0F-A7B3-1EA838FD403C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C76C6DBA-FE4B-4A0F-A7B3-1EA838FD403C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7356EEB2-EA90-4B5B-9CC7-1B210DDCF229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7356EEB2-EA90-4B5B-9CC7-1B210DDCF229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7356EEB2-EA90-4B5B-9CC7-1B210DDCF229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7356EEB2-EA90-4B5B-9CC7-1B210DDCF229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FBD8677-4814-44E6-8305-5999BDF2BECF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FBD8677-4814-44E6-8305-5999BDF2BECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FBD8677-4814-44E6-8305-5999BDF2BECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FBD8677-4814-44E6-8305-5999BDF2BECF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1E62CED-45ED-4A0F-9509-DE2B116A71B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1E62CED-45ED-4A0F-9509-DE2B116A71B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1E62CED-45ED-4A0F-9509-DE2B116A71B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1E62CED-45ED-4A0F-9509-DE2B116A71B5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E8E5DB38-00F7-4703-9A65-51961AC91894} = {B974A10F-900A-4E09-88EA-482830E15FFD}
+		{E1E62CED-45ED-4A0F-9509-DE2B116A71B5} = {4D734577-1614-4347-924D-AA8476B7C97F}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FD9F8445-C880-4097-9FE1-EDB55E382D3E}
+	EndGlobalSection
+EndGlobal

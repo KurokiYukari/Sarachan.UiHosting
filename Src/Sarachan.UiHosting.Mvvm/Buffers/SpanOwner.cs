@@ -9,10 +9,8 @@ namespace Sarachan.UiHosting.Mvvm.Buffers
     {
         public static SlicedSpanOwner<T> Slice<T>(SpanOwner<T> spanOwner, int start, int length)
         {
-            if ((ulong)((long)(uint)start + (uint)length) > (uint)spanOwner.Length)
-            {
-                ThrowHelper.ThrowArgumentOutOfRangeException();
-            }
+            Guard.IsInRangeFor(start, spanOwner.Span);
+            Guard.HasSizeGreaterThanOrEqualTo(spanOwner.Span, start + length);
             return new SlicedSpanOwner<T>(spanOwner, start, length);
         }
 
@@ -25,7 +23,7 @@ namespace Sarachan.UiHosting.Mvvm.Buffers
 
         public static SlicedSpanOwner<T> Allocate<T>(IEnumerable<T> items, ArrayPool<T>? pool = null)
         {
-            pool ??= ArrayPool<T>.Shared;
+            pool ??= ArrayPool<T>.Shared; 
             SpanOwner<T> owner;
 
             int index = 0;
@@ -55,7 +53,24 @@ namespace Sarachan.UiHosting.Mvvm.Buffers
                 }
             }
 
-            return Slice(owner, 0, index);
+            if (index == 0)
+            {
+                return new SlicedSpanOwner<T>(owner, 0, 0);
+            }
+            else
+            {
+                return Slice(owner, 0, index);
+            }
+        }
+
+        public static SpanOwner<T> Allocate<T>(IReadOnlyList<T> list, int index, int length, ArrayPool<T>? pool = null)
+        {
+            var owner = SpanOwner<T>.Allocate(length, pool ?? ArrayPool<T>.Shared);
+            for (int i = 0; i < length; i++)
+            {
+                owner.Span[i] = list[i + index];
+            }
+            return owner;
         }
     }
 }

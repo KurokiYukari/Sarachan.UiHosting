@@ -74,11 +74,6 @@ namespace Sarachan.UiHosting.Mvvm.Collections
             return new NotifyCollectionChangedEventArgs<T>(NotifyCollectionChangedAction.Replace, new(newItem), new(oldItem), startingIndex, startingIndex);
         }
 
-        public static NotifyCollectionChangedEventArgs<T> Replace(ReadOnlySpan<T> newItems, ReadOnlySpan<T> oldItems, int startingIndex)
-        {
-            return new NotifyCollectionChangedEventArgs<T>(NotifyCollectionChangedAction.Replace, newItems, oldItems, startingIndex, startingIndex);
-        }
-
         public static NotifyCollectionChangedEventArgs<T> Move(in T changedItem, int newStartingIndex, int oldStartingIndex)
         {
             return new NotifyCollectionChangedEventArgs<T>(NotifyCollectionChangedAction.Move, new(changedItem), default, newStartingIndex, oldStartingIndex);

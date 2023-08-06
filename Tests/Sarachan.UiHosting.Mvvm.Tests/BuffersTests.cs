@@ -24,7 +24,7 @@ namespace Sarachan.UiHosting.Mvvm.Tests
             }
         }
 
-        private IEnumerable<int> GenerateNumbers(int count)
+        private static IEnumerable<int> GenerateNumbers(int count)
         {
             for (int i = 0; i < count; i++)
             {

@@ -17,7 +17,9 @@ namespace Sarachan.UiHosting.Mvvm.Collections
 
     public interface IObservableCollection<T> : IReadOnlyObservableCollection<T>, ICollection<T>
     {
+        new int Count { get; }
 
+        void Reset(ReadOnlySpan<T> items);
     }
 
     public abstract class ObservableCollectionBase<T, TStorage> : 
@@ -54,15 +56,15 @@ namespace Sarachan.UiHosting.Mvvm.Collections
             OnCollectionChanged(NotifyCollectionChangedEventArgs<T>.Reset(default, oldItems.Span));
         }
 
-        public void Reset(ReadOnlySpan<T> items)
+        public virtual void Reset(ReadOnlySpan<T> items)
         {
-            using var oldItems = SpanOwner.Allocate<T>(Storage);
+            using var oldItems = SpanOwner.Allocate(Storage);
             Storage.Clear();
             foreach (var item in items)
             {
                 Storage.Add(item);
             }
-            using var newItems = SpanOwner.Allocate<T>(Storage);
+            using var newItems = SpanOwner.Allocate(Storage);
             OnCollectionChanged(NotifyCollectionChangedEventArgs<T>.Reset(newItems.Span, oldItems.Span));
         }
 

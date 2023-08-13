@@ -15,8 +15,12 @@ namespace Sarachan.UiHosting.Mvvm.Tests
                 0, 1, 2, 3, 4, 5, 6,
             };
 
-            var view = list.CreateSelectView(i => i)
-                .CreateWhereView(i => i % 2 == 0);
+            //var view = list.CreateSelectView(i => i)
+            //    .CreateWhereView(i => i % 2 == 0);
+
+            var view = list.BuildView(emitter =>
+                emitter.Select(i => i)
+                    .Where(i => i % 2 == 0));
 
             return (list, view);
         }

@@ -8,22 +8,29 @@ namespace Sarachan.UiHosting.Mvvm.Collections
 
     public interface IObservableList<T> : IObservableCollection<T>, IReadOnlyObservableList<T>, IList<T>
     {
+        new T this[int index] { get; set; }
+
+        void Move(int fromIndex, int toIndex);
+
+        void Insert(int index, ReadOnlySpan<T> items);
+        void RemoveAt(int index, int length);
     }
 
-    public class ObservableList<T> : ObservableCollectionBase<T, List<T>>, IObservableList<T>
+    public abstract class ObservableListBase<T, TList> : ObservableCollectionBase<T, TList>, IObservableList<T> 
+        where TList : IList<T>, IReadOnlyList<T> 
     {
         public T this[int index]
         {
-            get => Storage[index];
+            get => ((IList<T>)Storage)[index];
             set
             {
-                var oldValue = Storage[index];
-                Storage[index] = value;
+                var oldValue = this[index];
+                ((IList<T>)Storage)[index] = value;
                 OnCollectionChanged(NotifyCollectionChangedEventArgs<T>.Replace(value, oldValue, index));
             }
         }
 
-        public ObservableList() : base(new List<T>())
+        public ObservableListBase(TList storage) : base(storage)
         {
         }
 
@@ -46,7 +53,7 @@ namespace Sarachan.UiHosting.Mvvm.Collections
 
         public virtual void RemoveAt(int index)
         {
-            var oldItem = Storage[index];
+            var oldItem = this[index];
             Storage.RemoveAt(index);
             OnCollectionChanged(NotifyCollectionChangedEventArgs<T>.Remove(oldItem, index));
         }
@@ -88,10 +95,17 @@ namespace Sarachan.UiHosting.Mvvm.Collections
                 return;
             }
 
-            var movedItem = Storage[fromIndex];
+            var movedItem = this[fromIndex];
             CollectionUtils.Move(Storage, fromIndex, toIndex);
 
             OnCollectionChanged(NotifyCollectionChangedEventArgs<T>.Move(movedItem, toIndex, fromIndex));
+        }
+    }
+
+    public class ObservableList<T> : ObservableListBase<T, List<T>>
+    {
+        public ObservableList() : base(new List<T>())
+        {
         }
     }
 }

@@ -14,12 +14,6 @@ namespace Sarachan.UiHosting.Mvvm.Buffers
             return new SlicedSpanOwner<T>(spanOwner, start, length);
         }
 
-        public static SpanOwner<T> Allocate<T>(T item, ArrayPool<T>? pool = null)
-        {
-            var owner = SpanOwner<T>.Allocate(1, pool ?? ArrayPool<T>.Shared);
-            owner.Span[0] = item;
-            return owner;
-        }
 
         public static SlicedSpanOwner<T> Allocate<T>(IEnumerable<T> items, ArrayPool<T>? pool = null)
         {

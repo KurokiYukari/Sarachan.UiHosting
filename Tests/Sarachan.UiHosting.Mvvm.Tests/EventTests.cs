@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Sarachan.UiHosting.Mvvm.Disposable;
-using Sarachan.UiHosting.Mvvm.Events;
-using Sarachan.UiHosting.Mvvm.Events.Extensions;
+using Sarachan.Mvvm.Disposable;
+using Sarachan.Mvvm.Events;
+using Sarachan.Mvvm.Events.Extensions;
 
-namespace Sarachan.UiHosting.Mvvm.Tests
+namespace Sarachan.Mvvm.Tests
 {
     [TestClass]
     public class EventTests

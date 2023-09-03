@@ -6,11 +6,6 @@ namespace Sarachan.UiHosting.Extensions
 {
     public static class UiHostingAbstractionsExtensions
     {
-        public static IServiceCollection AddUi<TUiContext>(this IServiceCollection self) where TUiContext : class, IUiContext
-        {
-            return self.AddSingleton<IUiContext, TUiContext>();
-        }
-
         public static IUiBuilder UseFallbackExceptionHandler(this IUiBuilder builder, Func<IServiceProvider, IFallbackExceptionHandler> handler)
         {
             builder.Services.AddSingleton(handler);

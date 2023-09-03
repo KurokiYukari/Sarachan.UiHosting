@@ -2,10 +2,8 @@
 {
     public interface IWindowService
     {
-        IUiContext UiContext { get; }
+        IWindowHandle OpenWindow(IUiContext uiContext, object viewModel);
 
-        IWindowHandle OpenWindow(object viewModel);
-
-        void OpenDialog(object viewModel, Action<IWindowHandle> initializer);
+        void OpenDialog(IUiContext uiContext, object viewModel, Action<IWindowHandle> initializer);
     }
 }

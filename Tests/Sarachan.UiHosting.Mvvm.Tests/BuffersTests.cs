@@ -1,10 +1,10 @@
 using System.ComponentModel;
 using System.Diagnostics.Metrics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Sarachan.UiHosting.Mvvm.Buffers;
-using Sarachan.UiHosting.Mvvm.Events;
+using Sarachan.Mvvm.Buffers;
+using Sarachan.Mvvm.Events;
 
-namespace Sarachan.UiHosting.Mvvm.Tests
+namespace Sarachan.Mvvm.Tests
 {
     [TestClass]
     public class BuffersTests

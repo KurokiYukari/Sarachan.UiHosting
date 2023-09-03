@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CommonLibs\Sarachan.Ioc\Sarachan.Ioc.csproj" />
     <ProjectReference Include="..\Sarachan.UiHosting.Abstraction\Sarachan.UiHosting.Abstractions.csproj" />
   </ItemGroup>
 

@@ -7,10 +7,11 @@
         Title="MainWindow"
         Width="800"
         Height="450"
+        d:DataContext="{d:DesignInstance local:ViewModel}"
         mc:Ignorable="d">
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <local:ViewModel />
-    </Window.DataContext>
+    </Window.DataContext>-->
 
     <Grid>
         <Grid.RowDefinitions>

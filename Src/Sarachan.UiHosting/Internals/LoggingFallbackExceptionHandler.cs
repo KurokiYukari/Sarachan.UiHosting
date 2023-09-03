@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -19,6 +20,12 @@ namespace Sarachan.UiHosting.Internals
         public bool HandleException(Exception exception)
         {
             _logger.LogError(exception, "{message}", exception.Message);
+#if DEBUG
+            if (Debugger.IsAttached)
+            {
+                Debugger.Break();
+            }
+#endif
             return true;
         }
     }

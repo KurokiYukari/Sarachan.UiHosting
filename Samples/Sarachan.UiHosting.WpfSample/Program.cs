@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CommunityToolkit.HighPerformance.Buffers;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Sarachan.UiHosting.Extensions;
@@ -19,7 +20,6 @@ namespace Sarachan.UiHosting.WpfSample
         public static void Main(string[] args)
         {
             var services = new ServiceCollection();
-            services.BuildServiceProvider();
 
             var host = Host.CreateDefaultBuilder(args)
                 .ConfigureLogging((ctx, builder) =>
@@ -28,6 +28,7 @@ namespace Sarachan.UiHosting.WpfSample
                 })
                 .ConfigureServices((ctx, services) =>
                 {
+                    services.TryAddSingleton<IServiceProviderFactory<IServiceCollection>, DefaultServiceProviderFactory>();
                 })
                 .AddWpf<App>(builder => 
                 {

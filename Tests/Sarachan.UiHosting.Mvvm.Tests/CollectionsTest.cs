@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Sarachan.UiHosting.Mvvm.Collections;
-using Sarachan.UiHosting.Mvvm.Collections.Extensions;
-using Sarachan.UiHosting.Mvvm.Collections.View;
+using Sarachan.Mvvm.Collections;
+using Sarachan.Mvvm.Collections.Extensions;
+using Sarachan.Mvvm.Collections.View;
 
-namespace Sarachan.UiHosting.Mvvm.Tests
+namespace Sarachan.Mvvm.Tests
 {
     [TestClass]
     public class CollectionsTest

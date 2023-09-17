@@ -5,6 +5,12 @@ namespace Sarachan.Ioc
 {
     public static class MergedServiceProviderExtensions
     {
+        public static IServiceCollection AddMergedProvider(this IServiceCollection self, Func<IServiceProvider, IMergedServiceProviderFactory> implementation)
+        {
+            self.TryAddSingleton(implementation);
+            return self;
+        }
+
         public static IServiceCollection AddMergedProvider(this IServiceCollection self)
         {
             self.TryAddSingleton<IMergedServiceProviderFactory, MergedServiceProviderFactory>();

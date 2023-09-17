@@ -2,7 +2,8 @@
 
 namespace Sarachan.UiHosting.Windows
 {
-    public sealed partial class GenericWindowHandle : ObservableObject, IWindowHandle
+    public sealed partial class GenericWindowHandle : ObservableObject
+        //, IWindowHandle
     {
         [ObservableProperty]
         private string _title = string.Empty;

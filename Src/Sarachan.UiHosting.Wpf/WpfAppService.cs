@@ -34,6 +34,8 @@ namespace Sarachan.UiHosting.Wpf
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var options = _uiOptions.CurrentValue;
+
             using var serviceScope = _provider.CreateScope(services =>
             {
                 services.AddSingleton<IUiContext, WpfUiContext>();
@@ -44,14 +46,14 @@ namespace Sarachan.UiHosting.Wpf
 
             var tcs = new TaskCompletionSource();
             var thread = ActivatorUtilities.CreateInstance<WpfAppThread<TApp>>(provider);
-            var dispatcher = await thread.StartDispatcher("WpfApp");
+            var dispatcher = await thread.StartDispatcher(options.WpfAppThreadName);
             uiContext.Initialize(dispatcher);
 
             var defaultExceptionHandlerRegistration = _exceptionHandler.HandleDefaultExceptions();
             void ShutdownFinishedHandler(object? sender, EventArgs e)
             {
                 tcs.SetResult();
-                if (_uiOptions.CurrentValue.UseUiLifetime)
+                if (options.UseUiLifetime)
                 {
                     _applicationLifetime.StopApplication();
                 }

@@ -3,7 +3,7 @@ using Sarachan.UiHosting.Extensions;
 
 namespace Sarachan.UiHosting.Wpf.Extensions
 {
-    public interface IWpfBuilder : IUiBuilder
+    public interface IWpfBuilder
     {
     }
 

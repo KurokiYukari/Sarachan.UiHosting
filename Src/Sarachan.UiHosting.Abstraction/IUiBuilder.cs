@@ -7,4 +7,14 @@ namespace Sarachan.UiHosting.Extensions
     {
         IServiceCollection Services { get; }
     }
+
+    class UiBuilder : IUiBuilder
+    {
+        public IServiceCollection Services { get; }
+
+        public UiBuilder(IServiceCollection services)
+        {
+            Services = services;
+        }
+    }
 }

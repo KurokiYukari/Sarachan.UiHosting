@@ -35,6 +35,8 @@
         </ListBox>
 
         <StackPanel Grid.Row="1">
+            <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+
             <Button Click="AddButton_Click" Content="Add" />
             <Button Click="RemoveButton_Click" Content="Remove" />
             <Button Click="Button_Click" Content="RaiseException" />

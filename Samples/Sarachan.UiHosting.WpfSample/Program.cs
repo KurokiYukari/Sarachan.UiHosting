@@ -28,11 +28,15 @@ namespace Sarachan.UiHosting.WpfSample
                 })
                 .ConfigureServices((ctx, services) =>
                 {
-                    services.TryAddSingleton<IServiceProviderFactory<IServiceCollection>, DefaultServiceProviderFactory>();
+                    services.AddUi(builder =>
+                    {
+                        builder.UseLoggingFallbackExceptionHandler();
+                        builder.UseServiceProviderFactory(_ => new DefaultServiceProviderFactory());
+                    });
                 })
                 .AddWpf<App>(builder => 
                 {
-                    builder.UseLoggingFallbackExceptionHandler();
+                    
                 })
                 .Build();
 

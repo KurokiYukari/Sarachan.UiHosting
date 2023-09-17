@@ -1,49 +1,49 @@
 ﻿using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Sarachan.UiHosting.Navigation;
 
 namespace Sarachan.UiHosting.Windows
 {
-    public partial class WindowViewModel : ObservableObject, IWindowViewModel
+    public partial class WindowViewModel : ObservableObject, INavigationTarget
     {
-        public IWindowHandle? WindowHandle { get; private set; }
+        public event EventHandler<NavigationArgs.Close>? CloseRequested;
 
-        void IWindowViewModel.OnOpening(IWindowHandle handle)
+        void INavigationTarget.OnNavigated(NavigationArgs.Navigate args) 
         {
-            Guard.IsNull(WindowHandle);
-            WindowHandle = handle;
-            OnOpening();
+            OnNavigated(args);
         }
 
-        protected virtual void OnOpening()
+        protected virtual void OnNavigated(NavigationArgs.Navigate args)
         {
         }
 
-        public void Close()
+        public Task CloseAsync(NavigationArgs.Close args)
         {
-            var handle = WindowHandle;
-            Guard.IsNotNull(handle);
-
-            if (OnClosing())
-            {
-                handle.Close();
-                OnClosed();
-            }
+            RequestClose(args);
+            return Task.WhenAll(args.EventTasks);
         }
 
-        bool IWindowViewModel.OnClosing()
+        protected virtual void RequestClose(NavigationArgs.Close args)
         {
-            return OnClosing();
+            CloseRequested?.Invoke(this, args);
         }
 
-        protected virtual bool OnClosing() => true;
-
-        void IWindowViewModel.OnClosed()
+        ValueTask<bool> INavigationTarget.OnClosing(NavigationArgs.Close args)
         {
-            OnClosed();
-            WindowHandle = null;
+            return OnClosing(args);
         }
 
-        protected virtual void OnClosed()
+        protected virtual ValueTask<bool> OnClosing(NavigationArgs.Close args)
+        {
+            return ValueTask.FromResult(true);
+        }
+
+        void INavigationTarget.OnClosed(NavigationArgs.Close args)
+        {
+            OnClosed(args);
+        }
+
+        protected virtual void OnClosed(NavigationArgs.Close args)
         {
         }
     }

@@ -1,39 +1,28 @@
 ﻿namespace Sarachan.UiHosting
 {
-    public interface IUiContext
+    public interface IUiContext : IDisposable
     {
         IServiceProvider Provider { get; }
 
         Task<TResult> InvokeAsync<TResult>(Func<UiContextInvokeArgs?, TResult> function, UiContextInvokeArgs? args);
     }
 
-    public class UiContextInvokeArgs
+    public interface IUiContextFactory
     {
-        private Dictionary<object, object?>? _context;
+        ValueTask<IUiContext> StartNew(UiContextStartNewArgs args);
+    }
 
+    public class UiContextStartNewArgs : ContextArgs
+    {
+    }
+
+    public class UiContextInvokeArgs : ContextArgs
+    {
         public CancellationToken CancellationToken { get; }
 
         public UiContextInvokeArgs(CancellationToken cancellationToken)
         {
             CancellationToken = cancellationToken;
-        }
-
-        public void SetContext(object key, object? context)
-        {
-            _context ??= new Dictionary<object, object?>();
-            _context[key] = context;
-        }
-
-        public bool TryGetContext(object key, out object? context)
-        {
-            if (_context == null)
-            {
-                context = null;
-                return false;
-            }
-
-            bool result = _context.TryGetValue(key, out context);
-            return result;
         }
     }
 

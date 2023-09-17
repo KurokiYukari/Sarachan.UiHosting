@@ -1,21 +1,40 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Sarachan.UiHosting.Windows;
+using Sarachan.UiHosting.Navigation;
 
 namespace Sarachan.UiHosting.Extensions
 {
     public static class UiHostingAbstractionsExtensions
     {
-        public static IUiBuilder UseFallbackExceptionHandler(this IUiBuilder builder, Func<IServiceProvider, IFallbackExceptionHandler> handler)
+        public static IServiceCollection AddUi(this IServiceCollection services, Action<IUiBuilder> builderAction)
         {
-            builder.Services.AddSingleton(handler);
-            return builder;
+            var builder = new UiBuilder(services);
+            builderAction(builder);
+            return services;
         }
 
-        public static IUiBuilder UseWindowService(this IUiBuilder builder, Func<IServiceProvider, IWindowService> windowService)
+        public static IUiBuilder UseUiContextFactory(this IUiBuilder self, Func<IServiceProvider, IUiContextFactory> implementation)
         {
-            builder.Services.AddSingleton(windowService);
-            return builder;
+            self.Services.AddSingleton(implementation);
+            return self;
+        }
+
+        public static IUiBuilder UseFallbackExceptionHandler(this IUiBuilder self, Func<IServiceProvider, IFallbackExceptionHandler> implementation)
+        {
+            self.Services.AddSingleton(implementation);
+            return self;
+        }
+
+        public static IUiBuilder UseServiceProviderFactory(this IUiBuilder self, Func<IServiceProvider, IServiceProviderFactory<IServiceCollection>> implementation)
+        {
+            self.Services.AddSingleton(implementation);
+            return self;
+        }
+
+        public static IUiBuilder UseNavigationService(this IUiBuilder self, Func<IServiceProvider, INavigationService> implementation)
+        {
+            self.Services.AddSingleton(implementation);
+            return self;
         }
 
         public static IDisposable HandleDefaultExceptions(this IFallbackExceptionHandler self)

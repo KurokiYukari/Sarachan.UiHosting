@@ -14,6 +14,11 @@ namespace Sarachan.UiHosting.Wpf.Extensions
         {
             self.AddHostedService<WpfAppService<TApp>>();
             self.AddMergedProvider();
+            self.AddUi(builder =>
+            {
+                builder.UseUiContextFactory(provider => ActivatorUtilities.CreateInstance<WpfUiContextFactory>(provider));
+            });
+
             var builder = new WpfBuilder(self);
             builderDelegate(builder);
             return self;

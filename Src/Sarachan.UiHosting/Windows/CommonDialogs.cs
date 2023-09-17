@@ -6,19 +6,11 @@ namespace Sarachan.UiHosting.Windows
 {
     public partial class ConfirmDialogViewModel : DialogViewModelBase
     {
-        public bool? Result { get; private set; }
-
-        protected override void OnConfirm()
-        {
-            base.OnConfirm();
-            Result = true;
-        }
-
         [RelayCommand]
-        private void Cancel()
+        private Task Cancel()
         {
             Result = false;
-            Close();
+            return CloseAsync();
         }
     }
 

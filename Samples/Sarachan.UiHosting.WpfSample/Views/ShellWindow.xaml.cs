@@ -33,6 +33,14 @@ namespace Sarachan.UiHosting.WpfSample.Views
         public ShellWindow()
         {
             InitializeComponent();
+
+            DataContextChanged += ShellWindow_DataContextChanged;
+        }
+
+        private readonly object _lock = new();
+        private void ShellWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            BindingOperations.EnableCollectionSynchronization(ViewModel.DictView, _lock);
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -47,16 +55,21 @@ namespace Sarachan.UiHosting.WpfSample.Views
             TestStartThread();
         }
 
-        private int _threadCount;
         private async void TestStartThread()
         {
-            //var thread = ActivatorUtilities.CreateInstance<WpfThread>(ViewModel.Provider);
-            //var dispatcher = await thread.RunDispatcher($"WpfThread {_threadCount++}");
-            //var logger = ViewModel.Logger;
-            //dispatcher.Invoke(() =>
-            //{
-            //    logger.LogInformation("Thread Started");
-            //});
+            var viewModel = ViewModel;
+            var context = await viewModel.ContextFactory.StartNew(new UiContextStartNewArgs());
+            await context.InvokeAsync(() =>
+            {
+                var window = new ShellWindow();
+                window.DataContext = viewModel;
+                window.Closed += (sender, e) =>
+                {
+                    context.Dispose();
+                };
+
+                window.Show();
+            });
         }
 
         private void RemoveButton_Click(object sender, RoutedEventArgs e)
@@ -69,20 +82,27 @@ namespace Sarachan.UiHosting.WpfSample.Views
         }
     }
 
-    public class ViewModel : ObservableObject
+    public partial class ViewModel : ObservableObject
     {
         public ILogger Logger { get; }
         public IServiceProvider Provider { get; }
+
+        public IUiContextFactory ContextFactory { get; }
+
+        [ObservableProperty]
+        private string _text = string.Empty;
 
         public ObservableDictionary<string, int> Dict { get; } = new();
         
         public IStandardListView<KeyValuePair<string, int>> DictView { get; }
 
         public ViewModel(IServiceProvider provider,
-            ILogger<ViewModel> logger)
+            ILogger<ViewModel> logger,
+            IUiContextFactory uiContextFactory)
         {
             Provider = provider;
             Logger = logger;
+            ContextFactory = uiContextFactory;
 
             DictView = Dict.BuildView(emitter =>
             {

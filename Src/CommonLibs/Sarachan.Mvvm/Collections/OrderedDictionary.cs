@@ -16,7 +16,11 @@ namespace Sarachan.Mvvm.Collections
     /// maintains the key insertion order so that values can be retrieved by
     /// key index.
     /// </summary>
-    public class OrderedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, IList<KeyValuePair<TKey, TValue>>, IOrderedDictionary
+    public class OrderedDictionary<TKey, TValue> : 
+        IDictionary<TKey, TValue>,
+        IOrderedDictionary,
+        IList<KeyValuePair<TKey, TValue>>, 
+        IReadOnlyList<KeyValuePair<TKey, TValue>>
         where TKey : notnull
     {
 

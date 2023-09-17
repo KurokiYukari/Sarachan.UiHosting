@@ -44,7 +44,7 @@ namespace Sarachan.UiHosting.Wpf
             var token = CancellationToken.None;
             if (args != null)
             {
-                if (args.TryGetContext(priorityKey, out var priorityContext))
+                if (args.TryGetContext<object>(priorityKey, out var priorityContext))
                 {
                     if (priorityContext is string str)
                     {
@@ -62,6 +62,11 @@ namespace Sarachan.UiHosting.Wpf
 
             var operation = Dispatcher.InvokeAsync(() => function(args), priority, token);
             return operation.Task;
+        }
+
+        public void Dispose()
+        {
+            _dispatcher?.InvokeShutdown();
         }
     }
 }

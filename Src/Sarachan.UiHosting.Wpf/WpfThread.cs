@@ -65,8 +65,6 @@ namespace Sarachan.UiHosting.Wpf
 
         protected override void StartDispatcher(TaskCompletionSource<Dispatcher> tcs)
         {
-            var dispatcher = Dispatcher.CurrentDispatcher;
-            //var uiContext = new WpfContext(_provider, dispatcher);
             var app = ActivatorUtilities.CreateInstance<TApp>(_provider);
             if (app is IInitializeComponent initializeComponent)
             {

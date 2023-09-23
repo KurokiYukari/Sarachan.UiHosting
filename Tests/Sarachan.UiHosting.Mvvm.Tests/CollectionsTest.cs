@@ -92,5 +92,49 @@ namespace Sarachan.Mvvm.Tests
             list[1] = 2;
             AssertSampleData(list, view, new[] { 1, 2, 2, 3, 4, 5, 6 });
         }
+
+        [TestMethod]
+        public void TestOrderBy()
+        {
+            var list = new ObservableList<int>();
+
+            for (int i = 0; i < 10; i++)
+            {
+                list.Add(Random.Shared.Next(0, 100));
+            }
+
+            var view = list.BuildView(emitter => emitter.OrderBy());
+
+            void AssertListOrdered()
+            {
+                Assert.IsTrue(view!.SequenceEqual(list!.OrderBy(x => x)));
+            }
+
+            AssertListOrdered();
+
+            Span<int> newItems = stackalloc int[2];
+            for (int i = 0; i < 10; i++)
+            {
+                newItems[0] = Random.Shared.Next(0, 100);
+                newItems[1] = Random.Shared.Next(0, 100);
+                list.Insert(Random.Shared.Next(0, list.Count), newItems);
+            }
+
+            AssertListOrdered();
+
+            for (int i = 0; i < 10; i++)
+            {
+                list.RemoveAt(Random.Shared.Next(0, list.Count - 2), 2);
+            }
+
+            AssertListOrdered();
+
+            for (int i = 0; i < 10; i++)
+            {
+                list.Insert(Random.Shared.Next(0, list.Count), Random.Shared.Next(0, 100));
+            }
+
+            AssertListOrdered();
+        }
     }
 }

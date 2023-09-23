@@ -40,7 +40,7 @@ namespace Sarachan.UiHosting.WpfSample.Views
         private readonly object _lock = new();
         private void ShellWindow_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            BindingOperations.EnableCollectionSynchronization(ViewModel.DictView, _lock);
+            BindingOperations.EnableCollectionSynchronization(ViewModel.DictView, _lock);   
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

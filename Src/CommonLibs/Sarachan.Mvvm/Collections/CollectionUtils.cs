@@ -8,18 +8,20 @@ namespace Sarachan.Mvvm.Collections
         {
             Guard.IsGreaterThanOrEqualTo(count, 0);
 
-            if (count > list.Count)
+            var listCount = list.Count;
+
+            if (count > listCount)
             {
-                for (int i = 0; i < count - list.Count; i++)
+                for (int i = 0; i < count - listCount; i++)
                 {
                     list.Add(default!);
                 }
             }
             else
             {
-                for (int i = 0; i < list.Count - count; i++)
+                for (int i = 0; i < listCount - count; i++)
                 {
-                    list.RemoveAt(list.Count - 1);
+                    list.RemoveAt(listCount - i - 1);
                 }
             }
         }

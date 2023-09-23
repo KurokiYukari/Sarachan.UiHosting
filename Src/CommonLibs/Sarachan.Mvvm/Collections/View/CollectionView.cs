@@ -45,5 +45,23 @@ namespace Sarachan.Mvvm.Collections.View
             var whereEmitter = new WhereCollectionViewEventEmitter<TView>(predicate);
             return self.Combine(whereEmitter);
         }
+
+        public static IEventEmitter<T, TView> OrderBy<T, TView>(this IEventEmitter<T, TView> self, Comparison<TView> comparison, bool reverse = false)
+        {
+            var actualComparison = comparison;
+            if (reverse)
+            {
+                actualComparison = (x, y) => -comparison(x, y);
+            }
+
+            var orderByEmitter = new OrderByCollectionViewEventEmitter<TView>(actualComparison);
+            return self.Combine(orderByEmitter);
+        }
+
+        public static IEventEmitter<T, TView> OrderBy<T, TView>(this IEventEmitter<T, TView> self, bool reverse = false)
+        {
+            var comparer = Comparer<TView>.Default;
+            return OrderBy(self, comparer.Compare, reverse);
+        }
     }
 }

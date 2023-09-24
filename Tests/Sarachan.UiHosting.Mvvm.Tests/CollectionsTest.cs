@@ -96,9 +96,11 @@ namespace Sarachan.Mvvm.Tests
         [TestMethod]
         public void TestOrderBy()
         {
+            const int RANDOM_COUNT = 100;
+
             var list = new ObservableList<int>();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < RANDOM_COUNT; i++)
             {
                 list.Add(Random.Shared.Next(0, 100));
             }
@@ -113,7 +115,7 @@ namespace Sarachan.Mvvm.Tests
             AssertListOrdered();
 
             Span<int> newItems = stackalloc int[2];
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < RANDOM_COUNT; i++)
             {
                 newItems[0] = Random.Shared.Next(0, 100);
                 newItems[1] = Random.Shared.Next(0, 100);
@@ -122,14 +124,14 @@ namespace Sarachan.Mvvm.Tests
 
             AssertListOrdered();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < RANDOM_COUNT; i++)
             {
                 list.RemoveAt(Random.Shared.Next(0, list.Count - 2), 2);
             }
 
             AssertListOrdered();
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < RANDOM_COUNT; i++)
             {
                 list.Insert(Random.Shared.Next(0, list.Count), Random.Shared.Next(0, 100));
             }

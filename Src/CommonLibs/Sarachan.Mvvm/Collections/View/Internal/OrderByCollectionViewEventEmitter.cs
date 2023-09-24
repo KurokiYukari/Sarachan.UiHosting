@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Runtime.InteropServices;
 using CommunityToolkit.HighPerformance.Buffers;
 
 namespace Sarachan.Mvvm.Collections.View.Internal
@@ -102,28 +103,51 @@ namespace Sarachan.Mvvm.Collections.View.Internal
 
         private void InsertItem(int originalIndex, T item)
         {
-            var comparison = Comparison;
-            // TODO: BinarySearch
-            for (int i = 0; i < _items.Count; i++)
+            var insertIndex = FindInsertIndex(item);
+
+            _items.Insert(insertIndex, item);
+            if (insertIndex < _items.Count)
             {
-                if (comparison(item, _items[i]) <= 0)
+                for (int i = 0; i < _originalToNewIndexMap.Count; i++)
                 {
-                    _items.Insert(i, item);
-                    for (int j = 0; j < _originalToNewIndexMap.Count; j++)
+                    var index = _originalToNewIndexMap[i];
+                    if (index >= insertIndex)
                     {
-                        var index = _originalToNewIndexMap[j];
-                        if (index >= i)
-                        {
-                            _originalToNewIndexMap[j] = index + 1;
-                        }
+                        _originalToNewIndexMap[i] = index + 1;
                     }
-                    _originalToNewIndexMap.Insert(originalIndex, i);
-                    return;
+                }
+            }
+            _originalToNewIndexMap.Insert(originalIndex, insertIndex);
+        }
+
+        private int FindInsertIndex(T item)
+        {
+            var comparison = Comparison;
+
+            int start = 0;
+            int end = _items.Count - 1;
+
+            while (start <= end)
+            {
+                int center = (start + end) / 2;
+                var centerItem = _items[center];
+
+                var comparisonResult = comparison(item, centerItem);
+                if (comparisonResult > 0)
+                {
+                    start = center + 1;
+                }
+                else if (comparisonResult < 0)
+                {
+                    end = center - 1;
+                }
+                else
+                {
+                    return center;
                 }
             }
 
-            _items.Add(item);
-            _originalToNewIndexMap.Insert(originalIndex, _items.Count - 1);
+            return start;
         }
     }
 }

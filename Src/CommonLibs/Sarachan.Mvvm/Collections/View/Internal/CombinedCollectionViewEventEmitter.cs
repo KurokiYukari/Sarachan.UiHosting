@@ -27,6 +27,8 @@ namespace Sarachan.Mvvm.Collections.View.Internal
             _handler = handler;
 
             _sourceEmitter.Emit(e, OnSourceEmitted);
+
+            _handler = null;
         }
 
         private void OnSourceEmitted(object sender, NotifyCollectionChangedEventArgs<TRelay> e)
@@ -35,8 +37,6 @@ namespace Sarachan.Mvvm.Collections.View.Internal
             Guard.IsNotNull(handler);
 
             _combinedEmitter.Emit(e, handler);
-
-            _handler = null;
         }
     }
 }

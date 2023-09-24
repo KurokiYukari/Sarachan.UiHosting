@@ -63,5 +63,11 @@ namespace Sarachan.Mvvm.Collections.View
             var comparer = Comparer<TView>.Default;
             return OrderBy(self, comparer.Compare, reverse);
         }
+
+        public static IEventEmitter<T, TView> Reverse<T, TView>(this IEventEmitter<T, TView> self)
+        {
+            var reverseEmitter = new ReverseCollectionViewEmitter<TView>();
+            return self.Combine(reverseEmitter);
+        }
     }
 }

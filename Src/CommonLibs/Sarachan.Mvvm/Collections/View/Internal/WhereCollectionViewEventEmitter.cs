@@ -9,7 +9,7 @@ namespace Sarachan.Mvvm.Collections.View.Internal
     {
         public Predicate<T> Filter { get; }
 
-        private readonly List<int> _indexMap = new();
+        private readonly List<int> _originalToNewIndexMap = new();
 
         public WhereCollectionViewEventEmitter(Predicate<T> filter) 
         {
@@ -30,10 +30,11 @@ namespace Sarachan.Mvvm.Collections.View.Internal
                             {
                                 GetViewInsertIndex(emitHelper, newIndex, out var viewIndex);
                                 InsertViewItem(emitHelper, newIndex, viewIndex, item);
+                                _originalToNewIndexMap.Insert(newIndex, viewIndex);
                             }
                             else
                             {
-                                _indexMap.Insert(newIndex, -1);
+                                _originalToNewIndexMap.Insert(newIndex, -1);
                             }
 
                             newIndex++;
@@ -44,7 +45,9 @@ namespace Sarachan.Mvvm.Collections.View.Internal
                     {
                         for (int i = 0; i < e.OldItems.Length; i++)
                         {
-                            var viewIndex = _indexMap[i + e.OldStartingIndex];
+                            var originIndex = e.OldStartingIndex;
+                            var viewIndex = _originalToNewIndexMap[originIndex];
+                            _originalToNewIndexMap.RemoveAt(originIndex);
                             if (viewIndex >= 0)
                             {
                                 RemoveViewItem(emitHelper, viewIndex);
@@ -63,17 +66,19 @@ namespace Sarachan.Mvvm.Collections.View.Internal
                         }
                         else if (oldExisted)
                         {
+                            _originalToNewIndexMap[e.NewStartingIndex] = -1;
                             RemoveViewItem(emitHelper, replaceViewIndex);
                         }
                         else if (needAddNew)
                         {
                             InsertViewItem(emitHelper, e.NewStartingIndex, replaceViewIndex, replaceNewItem);
+                            _originalToNewIndexMap[e.NewStartingIndex] = replaceViewIndex;
                         }
                     }
                     break;
                 case NotifyCollectionChangedAction.Move:
                     {
-                        var fromViewIndex = _indexMap[e.OldStartingIndex];
+                        var fromViewIndex = _originalToNewIndexMap[e.OldStartingIndex];
                         if (fromViewIndex >= 0)
                         {
                             bool toViewItemExisted = GetViewInsertIndex(emitHelper, e.NewStartingIndex, out var toViewIndex);
@@ -83,31 +88,31 @@ namespace Sarachan.Mvvm.Collections.View.Internal
                                 {
                                     toViewIndex--;
                                 }
-                                for (int i = 0; i < _indexMap.Count; i++)
+                                for (int i = 0; i < _originalToNewIndexMap.Count; i++)
                                 {
-                                    var mappedIndex = _indexMap[i];
+                                    var mappedIndex = _originalToNewIndexMap[i];
                                     if (mappedIndex >= fromViewIndex && mappedIndex <= toViewIndex)
                                     {
-                                        _indexMap[i] = mappedIndex - 1;
+                                        _originalToNewIndexMap[i] = mappedIndex - 1;
                                     }
                                 }
                             }
                             else if (fromViewIndex > toViewIndex)
                             {
-                                for (int i = 0; i < _indexMap.Count; i++)
+                                for (int i = 0; i < _originalToNewIndexMap.Count; i++)
                                 {
-                                    var mappedIndex = _indexMap[i];
+                                    var mappedIndex = _originalToNewIndexMap[i];
                                     if (mappedIndex >= toViewIndex && mappedIndex <= fromViewIndex)
                                     {
-                                        _indexMap[i] = mappedIndex + 1;
+                                        _originalToNewIndexMap[i] = mappedIndex + 1;
                                     }
                                 }
                             }
 
                             emitHelper.Move(fromViewIndex, toViewIndex);
-                            _indexMap[e.OldStartingIndex] = toViewIndex;
+                            _originalToNewIndexMap[e.OldStartingIndex] = toViewIndex;
                         }
-                        CollectionUtils.Move(_indexMap, e.OldStartingIndex, e.NewStartingIndex);
+                        CollectionUtils.Move(_originalToNewIndexMap, e.OldStartingIndex, e.NewStartingIndex);
                     }
                     break;
                 case NotifyCollectionChangedAction.Reset:
@@ -115,19 +120,19 @@ namespace Sarachan.Mvvm.Collections.View.Internal
                         using var spanOwner = SpanOwner<T>.Allocate(e.NewItems.Length);
 
                         int count = 0;
-                        _indexMap.Clear();
+                        _originalToNewIndexMap.Clear();
 
                         foreach (var item in e.NewItems)
                         {
                             if (Filter?.Invoke(item) ?? true)
                             {
-                                _indexMap.Add(count);
+                                _originalToNewIndexMap.Add(count);
                                 spanOwner.Span[count] = item;
                                 count++;
                             }
                             else
                             {
-                                _indexMap.Add(-1);
+                                _originalToNewIndexMap.Add(-1);
                             }
                         }
 
@@ -141,40 +146,39 @@ namespace Sarachan.Mvvm.Collections.View.Internal
 
         private void InsertViewItem(CollectionViewEventEmitterHelper<T> emitHelper, int newIndex, int viewIndex, T item)
         {
-            for (int j = 0; j < _indexMap.Count; j++)
+            for (int j = 0; j < _originalToNewIndexMap.Count; j++)
             {
-                var mappedIndex = _indexMap[j];
+                var mappedIndex = _originalToNewIndexMap[j];
                 if (mappedIndex >= viewIndex)
                 {
-                    _indexMap[j] = mappedIndex + 1;
+                    _originalToNewIndexMap[j] = mappedIndex + 1;
                 }
             }
-            _indexMap.Insert(newIndex, viewIndex);
             emitHelper.Insert(viewIndex, new(item));
         }
 
         private void RemoveViewItem(CollectionViewEventEmitterHelper<T> emitHelper, int viewIndex)
         {
             emitHelper.RemoveAt(viewIndex, 1);
-            for (int j = 0; j < _indexMap.Count; j++)
+            for (int j = 0; j < _originalToNewIndexMap.Count; j++)
             {
-                var mappedIndex = _indexMap[j];
+                var mappedIndex = _originalToNewIndexMap[j];
                 if (mappedIndex > viewIndex)
                 {
-                    _indexMap[j] = mappedIndex - 1;
+                    _originalToNewIndexMap[j] = mappedIndex - 1;
                 }
             }
         }
 
         private bool GetViewInsertIndex(CollectionViewEventEmitterHelper<T> emitHelper, int originIndex, out int viewIndex)
         {
-            if (originIndex >= _indexMap.Count)
+            if (originIndex >= _originalToNewIndexMap.Count)
             {
                 viewIndex = emitHelper.Count;
                 return false;
             }
 
-            viewIndex = _indexMap[originIndex];
+            viewIndex = _originalToNewIndexMap[originIndex];
             if (viewIndex >= 0)
             {
                 return true;
@@ -182,7 +186,7 @@ namespace Sarachan.Mvvm.Collections.View.Internal
 
             for (int i = originIndex - 1; i >= 0; i--)
             {
-                viewIndex = _indexMap[i];
+                viewIndex = _originalToNewIndexMap[i];
                 if (viewIndex >= 0)
                 {
                     viewIndex++;
@@ -190,9 +194,9 @@ namespace Sarachan.Mvvm.Collections.View.Internal
                 }
             }
 
-            for (int i = originIndex + 1; i < _indexMap.Count; i++)
+            for (int i = originIndex + 1; i < _originalToNewIndexMap.Count; i++)
             {
-                viewIndex = _indexMap[i];
+                viewIndex = _originalToNewIndexMap[i];
                 if (viewIndex >= 0)
                 {
                     return false;
